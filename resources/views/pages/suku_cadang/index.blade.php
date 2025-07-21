@@ -50,11 +50,7 @@
                             <td>{{ $item->nama_barang }}</td>
                             <td>{{ $item->satuan }}</td>
                             <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-                            <td>
-                                <span class="badge badge-{{ $item->stock > 10 ? 'success' : ($item->stock > 0 ? 'warning' : 'danger') }}">
-                                    {{ $item->stock }}
-                                </span>
-                            </td>
+                            <td>{{ $item->stok}}</td>
                             <td>
                             <a href="{{ route('suku_cadang.edit', $item->suku_cadang_id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i> Edit

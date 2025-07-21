@@ -10,14 +10,16 @@ class Teknisi extends Model
 {
     use HasFactory;
 
-    protected $table = 'teknisis'; // sesuaikan dengan nama tabel
+    protected $table = 'rekam_detail_part'; // sesuaikan dengan nama tabel
 
     protected $fillable = [
         'hasil_pekerjaan',
         'suku_cadang_diganti',
         'jumlah_suku_cadang_diganti',
         'saran',
-        'verifikasi',
+        'verifikasi',    ];
         // tambah jika ada kolom lain
-    ];
+
+        public $timestamps = false;
+
 }

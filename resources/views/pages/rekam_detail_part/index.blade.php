@@ -3,14 +3,12 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Hasil Pekerjaan</h1>
-        @if (count($teknisis) > 0 && $teknisis[0]->order_id)
-        <a href="{{ route('hasil_kerja.form', ['order_id' => $teknisis[0]->order_id]) }}" class="btn btn-sm btn-primary shadow-sm">
-            <i class="fas fa-plus-circle"></i> Tambah Hasil Pekerjaan
-        </a>
-        @endif
+        <h1 class="h3 mb-0 text-gray-800">Detail Part</h1>
+        <a href="{{ route('rekam_detail_part.create') }}" class="btn btn-sm btn-primary shadow-sm">
+    <i class="fas fa-plus-circle">Tambah Hasil Pekerjaan & Komponen yang diganti</i></a>
     </div>
-
+ 
+    
     @if ($errors->any())
     <div class="alert alert-danger">
         <ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
@@ -36,43 +34,32 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Hasil Pekerjaan</th>
-                            <th>Suku Cadang Diganti</th>
+                            <th>ID Rekam</th>
+                            <th>Suku Cadang</th>
                             <th>Jumlah</th>
-                            <th>Saran</th>
-                            <th>Verifikasi</th>
+                            <th>Subtotal</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($teknisis as $item)
+                        @foreach ($rekamDetails as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->hasil_pekerjaan }}</td>
-                            <td>{{ $item->suku_cadang_diganti ?? '-' }}</td>
-                            <td>{{ $item->jumlah_suku_cadang_diganti }}</td>
-                            <td>{{ $item->saran }}</td>
+                            <td>{{ $item->rekam_id }}</td>
+                            <td>{{ $item->sukuCadang->nama_barang ?? '-' }}</td>
+                            <td>{{ $item->jumlah }}</td>
+                            <td>{{ $item->subtotal }}</td>
                             <td>
-                                <span class="badge badge-{{ $item->verifikasi == 'Sudah' ? 'success' : 'warning' }}">
-                                    {{ $item->verifikasi }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('hasil_kerja.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                <a href="{{ route('rekam_detail_part.edit', $item->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('hasil_kerja.destroy', $item->id) }}" method="POST" class="d-inline">
+                                <form action="{{ route('rekam_detail_part.destroy', $item->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
-                                @if ($item->order_id)
-                                <a href="{{ route('hasil_kerja.form', ['order_id' => $item->order_id]) }}" class="btn btn-info btn-sm">
-                                    <i class="fas fa-wrench"></i>
-                                </a>
-                                @endif
                             </td>
                         </tr>
                         @endforeach

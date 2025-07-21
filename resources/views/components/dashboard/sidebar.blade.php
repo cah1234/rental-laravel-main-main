@@ -22,21 +22,22 @@
     <hr class="sidebar-divider">
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <!-- collapsed -->
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-            aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Manajemen Data</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner roun ded">
-                <h6 class="collapse-header">Manajemen Data</h6>
-                <a class="collapse-item {{ set_active(['user.index','user.edit']) }}"
-                    href="{{ route('user.index') }}">Data Akun User</a>
-            </div>
+    @if(auth()->user()->role === 'admin')
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+        aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Manajemen Data</span>
+    </a>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manajemen Data</h6>
+            <a class="collapse-item {{ set_active(['user.index','user.edit']) }}"
+                href="{{ route('user.index') }}">Data Akun User</a>
         </div>
+    </div>
     </li>
+    @endif
 
 
     <li class="nav-item {{ set_active(['rekammedis.index']) }}">
@@ -52,17 +53,17 @@
     </a>
     </li>
 
-    <li class="nav-item {{ set_active(['pelanggan.index']) }}">
-    <a class="nav-link" href="{{ route('pelanggan.index') }}">
+    <li class="nav-item {{ set_active(['rekam_detail_part.index']) }}">
+    <a class="nav-link" href="{{ route('rekam_detail_part.index') }}">
         <i class="fas fa-fw fa-check"></i>
         <span>Verifikasi Pekerjaan</span>
     </a>
     </li>
 
-    <li class="nav-item {{ set_active(['hasil-kerja.index']) }}">
-    <a class="nav-link" href="{{ route('hasil_kerja.index') }}">
+    <li class="nav-item {{ set_active(['rekam_detail_part.index']) }}">
+    <a class="nav-link" href="{{ route('rekam_detail_part.index') }}">
         <i class="fas fa-fw fa-tools"></i>
-        <span>Hasil Pekerjaan & Komponen</span>
+        <span>Detail Part</span>
     </a>
 </li>
 <li class="nav-item {{ set_active(['suku_cadang.index']) }}">

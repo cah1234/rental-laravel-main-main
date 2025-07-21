@@ -20,6 +20,11 @@ class ServiceOrder extends Model
     {
         return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
     }
+    public function kendaraan()
+{
+    return $this->belongsTo(Kendaraan::class);
+}
+
 
 }
 

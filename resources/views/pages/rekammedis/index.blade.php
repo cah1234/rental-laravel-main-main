@@ -25,37 +25,34 @@
                         <tr>
                             <th>No</th>
                             <th>Tanggal</th>
-                            <th>No Telpon</th>
-                            <th>Nomor Rangka</th>
-                            <th>Jenis Mobil</th>
                             <th>Nama Customer</th>
+                            <th>Jenis Mobil</th>
                             <th>Masalah Kerusakan</th>
+                            <th>Status Service</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($items as $row)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $row->date }}</td>
-                            <td>{{ $row->no_telpon }}</td>
-                            <td>{{ $row->nomor_rangka }}</td>
-                            <td>{{ $row->jenis_mobil }}</td>
-                            <td>{{ $row->nama_customer }}</td>
-                            <td>{{ $row->masalah_kerusakan }}</td>
-                            <td><a href="{{ route('rekammedis.show', $row->id) }}" class="btn btn-info btn-sm">Detail</a>
-                            <br>
-                            <a href="{{ route('rekammedis.show', $row->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <br>
-                            <form action="{{ route('rekammedis.destroy', $row->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-</form>
-
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $row->tanggal_servis }}</td>
+                        <td>{{ optional($row->kendaraan->pelanggan)->nama_pelanggan ?? '-' }}</td>
+                        <td>{{ optional($row->kendaraan)->merk ?? '-' }}</td>
+                        <td>{{ $row->keluhan }}</td>
+                        <td>{{ $row->status_servis ?? '-' }}</td>
+                            <td>
+                              
+                                <a href="{{ route('rekammedis.edit', $row->rekam_id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('rekammedis.destroy', $row->rekam_id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </div>
@@ -72,35 +69,44 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                @foreach([
-                    ['name'=>'date','label'=>'Tanggal','type'=>'date'],
-                    ['name'=>'no_telpon','label'=>'No Telpon','type'=>'text'],
-                    ['name'=>'nomor_rangka','label'=>'Nomor Rangka','type'=>'text'],
-                    ['name'=>'nomor_polisi','label'=>'Nomor Polisi','type'=>'text'],
-                    ['name'=>'jenis_mobil','label'=>'Jenis Mobil','type'=>'text'],
-                    ['name'=>'nama_customer','label'=>'Nama Customer','type'=>'text'],
-                    ['name'=>'masalah_kerusakan','label'=>'Masalah Kerusakan','type'=>'textarea'],
-                    ['name'=>'service_bulanan_balancing','label'=>'Service Bulanan Balancing','type'=>'select','options'=>[''=>'-- Pilih --','oli'=>'Oli','freon ac'=>'Freon AC','whiper'=>'Whiper','kaca'=>'Kaca','ban'=>'Ban','spooring'=>'Spooring']],
-                    ['name'=>'uraian','label'=>'Uraian','type'=>'textarea'],
-                    ['name'=>'tanggal_kerusakan','label'=>'Tanggal Kerusakan','type'=>'date'],
-                    ['name'=>'dimana','label'=>'Dimana','type'=>'select','options'=>[''=>'-- Pilih --','tanajakan'=>'Tanjakan','turunan'=>'Turunan','jalan_lurus'=>'Jalan Lurus','bergelombang'=>'Bergelombang']],
-                    ['name'=>'estimasi','label'=>'Estimasi','type'=>'text'],
-                ] as $input)
-                    <div class="form-group">
-                        <label>{{ $input['label'] }}</label>
-                        @if($input['type']=='textarea')
-                            <textarea name="{{ $input['name'] }}" class="form-control"></textarea>
-                        @elseif($input['type']=='select')
-                            <select name="{{ $input['name'] }}" class="form-control">
-                                @foreach($input['options'] as $k=>$v)
-                                    <option value="{{ $k }}">{{ $v }}</option>
-                                @endforeach
-                            </select>
-                        @else
-                            <input type="{{ $input['type'] }}" name="{{ $input['name'] }}" class="form-control">
-                        @endif
-                    </div>
-                @endforeach
+                <!-- Dropdown Nama Pelanggan -->
+                <div class="form-group">
+                    <label>Nama Pelanggan</label>
+                    <select name="pelanggan_id" id="pelanggan_id" class="form-control" required>
+                        <option value="">-- Pilih Pelanggan --</option>
+                        @foreach($pelanggans as $id => $nama)
+                            <option value="{{ $id }}">{{ $nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Input Nomor Polisi -->
+                <div class="form-group">
+                    <label>Nomor Polisi</label>
+                    <input type="text" name="no_polisi" id="no_polisi" class="form-control" readonly>
+                    <input type="hidden" name="kendaraan_id" id="kendaraan_id">
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Servis</label>
+                    <input type="date" name="tanggal_servis" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Keluhan</label>
+                    <textarea name="keluhan" class="form-control" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Status Servis</label>
+                    <select name="status_servis" class="form-control">
+                        <option value="">-- Pilih Status --</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Dalam Proses">Dalam Proses</option>
+                        <option value="Dibatalkan">Dibatalkan</option>
+                    </select>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -112,11 +118,32 @@
 </div>
 @endsection
 
+@push('addon-script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   $('#pelanggan_id').on('change', function () {
+    let id = $(this).val();
+    if (id) {
+        $.get('/kendaraan-by-pelanggan/' + id, function(res) {
+            $('#no_polisi').val(res.no_polisi || '');
+            $('#kendaraan_id').val(res.kendaraan_id || '');
+        });
+    } else {
+        $('#no_polisi').val('');
+        $('#kendaraan_id').val('');
+    }
+});
+
+</script>
+@endpush
+
 @push('addon-style')
 <link href="{{ url('') }}/dashboard/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 @endpush
+
 @push('addon-script')
 <script src="{{ url('') }}/dashboard/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="{{ url('') }}/dashboard/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="{{ url('') }}/dashboard/js/demo/datatables-demo.js"></script>
 @endpush
+

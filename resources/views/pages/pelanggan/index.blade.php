@@ -32,13 +32,13 @@
                         </tr>
                     </thead>
                     <tbody>
-    @forelse($pelanggans as $pelanggan)
+        @forelse($pelanggans as $pelanggan)
         <tr>
             <td>{{ $loop->iteration }}</td>
             <td>{{ $pelanggan->nama_pelanggan ?? '-' }}</td>
             <td>{{ $pelanggan->no_telepon ?? '-' }}</td>
             <td>{{ $pelanggan->email ?? '-' }}</td>
-            <td>{{ optional($pelanggan->created_at)->format('d-m-Y') }}</td>
+            <td>{{ $pelanggan->created_at ? \Carbon\Carbon::parse($pelanggan->created_at)->format('d-m-Y') : '-' }}</td>
             <td>{{ $pelanggan->alamat ?? '-' }}</td>
             <td>
                 <a href="{{ route('pelanggan.show', $pelanggan->pelanggan_id) }}" class="btn btn-info btn-sm">Lihat

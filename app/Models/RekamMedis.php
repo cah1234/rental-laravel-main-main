@@ -9,5 +9,24 @@ class RekamMedis extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $primaryKey = 'rekam_id'; // ← ini penting
+    public $incrementing = true;
+    public $timestamps = false;
+
+    protected $fillable = [
+        'kendaraan_id',
+        'tanggal_servis',
+        'keluhan',
+        'status_servis',
+    ];
+
+    public function getRouteKeyName()
+    {
+        return 'rekam_id';
+    }
+
+    public function kendaraan()
+    {
+        return $this->belongsTo(Kendaraan::class, 'kendaraan_id', 'kendaraan_id');
+    }
 }
