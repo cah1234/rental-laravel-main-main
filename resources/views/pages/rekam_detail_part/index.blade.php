@@ -5,7 +5,8 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Detail Part</h1>
         <a href="{{ route('rekam_detail_part.create') }}" class="btn btn-sm btn-primary shadow-sm">
-    <i class="fas fa-plus-circle">Tambah Hasil Pekerjaan & Komponen yang diganti</i></a>
+    <i class="fas fa-plus-circle mr-1"></i>Tambah hasil pekerjaan & komponen yang diganti
+</a>
     </div>
  
     
@@ -50,16 +51,16 @@
                             <td>{{ $item->jumlah }}</td>
                             <td>{{ $item->subtotal }}</td>
                             <td>
-                                <a href="{{ route('rekam_detail_part.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('rekam_detail_part.destroy', $item->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                            <a href="{{ route('rekam_detail_part.edit', $item->id) }}" class="btn btn-warning btn-sm">
+    <i class="fas fa-edit mr-1"></i>Edit
+</a>
+<form action="{{ route('rekam_detail_part.destroy', $item->id) }}" method="POST" class="d-inline">
+    @csrf
+    @method('DELETE')
+    <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">
+        <i class="fas fa-trash mr-1"></i>Hapus
+    </button>
+</form>
                             </td>
                         </tr>
                         @endforeach

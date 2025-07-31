@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\RekamMedis;
 use App\Models\Pelanggan;
 use App\Models\Kendaraan;
+use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -16,13 +17,15 @@ class RekamMedisController extends Controller
 
     // Menampilkan semua data
     public function index()
-    {
-        $items = RekamMedis::with('kendaraan.pelanggan')->get();
-        $pelanggans = Pelanggan::pluck('nama_pelanggan', 'pelanggan_id');
-        $kendaraans = Kendaraan::pluck('no_polisi', 'kendaraan_id');
-    
-        return view('pages.rekammedis.index', compact('items', 'pelanggans', 'kendaraans'));
-    }
+{
+    $items = RekamMedis::with(['kendaraan.pelanggan', 'teknisi'])->get();
+    $pelanggans = Pelanggan::pluck('nama_pelanggan', 'pelanggan_id');
+    $kendaraans = Kendaraan::pluck('no_polisi', 'kendaraan_id');
+    $teknisis = User::where('role', 'teknisi')->get();
+
+    return view('pages.rekammedis.index', compact('items', 'pelanggans', 'kendaraans', 'teknisis'));
+}
+
     
     public function getKendaraanByPelanggan($pelanggan_id)
 {
@@ -45,23 +48,25 @@ class RekamMedisController extends Controller
 
     // Menyimpan data baru
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'kendaraan_id' => 'required|numeric',
-            'tanggal_servis' => 'required|date',
-            'keluhan' => 'required|string',
-            'status_servis' => 'nullable|string',
-        ]);
-    
-        RekamMedis::create([
-            'kendaraan_id' => (int) $validated['kendaraan_id'],
-            'tanggal_servis' => $validated['tanggal_servis'],
-            'keluhan' => $validated['keluhan'],
-            'status_servis' => $validated['status_servis'] ?? null,
-        ]);
-    
-        return redirect()->route('rekammedis.index')->with('success', 'Berhasil menambah data rekam medis.');
-    }
+{
+    $validated = $request->validate([
+        'kendaraan_id' => 'required|numeric',
+        'tanggal_servis' => 'required|date',
+        'keluhan' => 'required|string',
+        'status_servis' => 'nullable|string',
+        'teknisi_id' => 'required|exists:users,user_id',
+    ]);
+
+    RekamMedis::create([
+        'kendaraan_id' => (int) $validated['kendaraan_id'],
+        'tanggal_servis' => $validated['tanggal_servis'],
+        'keluhan' => $validated['keluhan'],
+        'status_servis' => $validated['status_servis'] ?? null,
+        'teknisi_id' => $validated['teknisi_id'],
+    ]);
+
+    return redirect()->route('rekammedis.index')->with('success', 'Berhasil menambah data rekam medis.');
+}
     
     // Menghapus data
     public function destroy($id)

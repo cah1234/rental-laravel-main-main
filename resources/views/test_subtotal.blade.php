@@ -3,11 +3,11 @@
 @section('content')
 <div class="container mt-4">
     @php
-        $suku_cadangs = collect([
+        $suku_cadang = collect([
             (object)['id' => 1, 'nama_barang' => 'Filter Oli', 'harga' => 75000.00],
             (object)['id' => 2, 'nama_barang' => 'Kampas Rem', 'harga' => 125000.50],
         ]);
-        $hargaMap = $suku_cadangs->pluck('harga', 'id');
+        $hargaMap = $suku_cadang->pluck('harga', 'id');
     @endphp
 
     <input type="hidden" id="hargaMapData" value='@json($hargaMap)'>
@@ -16,7 +16,7 @@
         <label for="suku_cadang_id" class="form-label">Komponen</label>
         <select id="suku_cadang_id" class="form-control">
             <option value="">-- Pilih Komponen --</option>
-            @foreach ($suku_cadangs as $item)
+            @foreach ($suku_cadang as $item)
                 <option value="{{ $item->id }}">{{ $item->nama_barang }} - Rp {{ number_format($item->harga, 0, ',', '.') }}</option>
             @endforeach
         </select>

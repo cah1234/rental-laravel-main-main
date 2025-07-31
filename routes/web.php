@@ -9,7 +9,10 @@ use App\Models\Pelanggan;
 use App\Models\RekamMedis;
 use app\Models\RekamDetailPart;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KeluhanController;
 
+Route::get('/pelanggan/keluh', [KeluhanController::class, 'create'])->name('pelanggan.keluh');
+Route::post('/pelanggan/keluh', [KeluhanController::class, 'store'])->name('keluhan.store');
 
 //Auth Admin//
 Route::resource('hasil_kerja', RekamDetailPartController::class);

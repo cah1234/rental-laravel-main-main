@@ -29,4 +29,13 @@ class RekamMedis extends Model
     {
         return $this->belongsTo(Kendaraan::class, 'kendaraan_id', 'kendaraan_id');
     }
+    public function teknisi()
+{
+    return $this->belongsTo(User::class, 'teknisi_id', 'user_id');
+}
+public function detailParts()
+{
+    return $this->hasMany(\App\Models\RekamDetailPart::class, 'rekam_id');
+}
+
 }

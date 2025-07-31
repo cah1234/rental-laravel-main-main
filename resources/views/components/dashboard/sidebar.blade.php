@@ -39,6 +39,12 @@
     </li>
     @endif
 
+    <li class="nav-item {{ set_active(['pelanggan.keluh']) }}">
+    <a class="nav-link" href="{{ route('pelanggan.keluh') }}">
+        <i class="fas fa-fw fa-car"></i>
+        <span>Keluhan</span>
+    </a>
+    </li>
 
     <li class="nav-item {{ set_active(['rekammedis.index']) }}">
     <a class="nav-link" href="{{ route('rekammedis.index') }}">
